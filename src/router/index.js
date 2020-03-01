@@ -9,6 +9,8 @@ const Category = () =>
     import ('../views/category/Category')
 const My = () =>
     import ('../views/my/My')
+const Detail = () =>
+    import ('../views/detail/Detail')
 
 Vue.use(Router)
 
@@ -35,6 +37,11 @@ const routes = [{
         path: '/my',
         component: My,
         meta: { title: '我的' }
+    },
+    {
+        path: '/detail/:iid',
+        component: Detail,
+        meta: { title: '商品详情' }
     },
 ]
 
