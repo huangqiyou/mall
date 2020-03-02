@@ -5,6 +5,7 @@
 
   <!-- Scroll滚动区域 -->
   <scroll class="content" ref="scroll" :probe-type="3" @scroll="contentScroll">
+
    <!-- DetailSwiper -->
    <detail-swiper :top-images="topImages"></detail-swiper>
 
@@ -25,10 +26,11 @@
 
    <!-- GoodsList -->
    <goods-list ref="recommend" :goods="recommends"></goods-list>
+  
   </scroll>
 
   <!-- DetailBottomBar -->
-  <detail-bottom-bar></detail-bottom-bar>
+  <detail-bottom-bar @addToCart="addToCart"></detail-bottom-bar>
 
   <!-- BackTop -->
   <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
@@ -174,6 +176,21 @@ import { itemListenerMixin, backTopMixin } from 'assets/commons/mixin'
     //3.是否显示回到顶部
     //1.判断backTop是否显示
     this.listenShowBackTop(position);
+   },
+
+   //点击添加购物车
+   addToCart(){
+    // console.log('---------------');
+    //1.获取购物车需要展示的信息
+    const product = {};
+    product.image = this.topImages[0];
+    product.title = this.goods.title;
+    product.desc = this.goods.desc;
+    product.price = this.goods.realPrice;
+    product.iid = this.iid;
+
+    //2.将商品添加到购物车里
+    this.$store.dispatch('addCart',product);
    },
   },
   destroyed(){

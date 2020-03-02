@@ -25,8 +25,10 @@
 	export default {
 		name: "DetailBottomBar",
     methods: {
+      //点击添加到购物车
       addToCart() {
-        this.$emit('addToCart')
+        // console.log('添加成功');
+        this.$emit('addToCart');
       }
     }
 	}
@@ -34,7 +36,7 @@
 
 <style scoped>
 .bottom-bar {
-  height: 58px;
+  height: 49px;
   position: relative;
   background-color: #fff;
   display: flex;
@@ -49,24 +51,27 @@
 }
 .bar-left .text {
   font-size: 13px;
+  padding-bottom: 2px;
 }
 .bar-left .icon {
   display: block;
   width: 22px;
   height: 22px;
-  margin: 6px auto 3px;
-  /* background: url("~assets/img/detail/detail_bottom.png") 0 0/100%; */
+  margin: 5px auto 0px;
 }
 .bar-left .service {
-  background-position:0 -54px;
+  background: url("~assets/img/detail/kefu.png") 0 0/100%;
 }
 .bar-left .shop {
-  background-position:0 -98px;
+  background: url("~assets/img/detail/dianpu.png") 0 0/100%;
+}
+.bar-left .select {
+  background: url("~assets/img/detail/shoucang.png") 0 0/100%;
 }
 .bar-right {
   font-size: 15px;
   color: #fff;
-  line-height: 58px;
+  line-height: 49px;
 }
 .bar-right .cart {
   background-color: #ffe817;

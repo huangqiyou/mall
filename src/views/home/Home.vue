@@ -1,7 +1,7 @@
 <template>
  <div id="home">
   <!-- title -->
-  <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
+  <nav-bar class="home-nav"><div slot="center">女人街</div></nav-bar>
   <tab-control 
     :titles="['流行','新款','精选']" 
     @tabClick="tabClick" 
@@ -144,7 +144,6 @@ import { itemListenerMixin, backTopMixin } from 'assets/commons/mixin'
 
    //获取tabControl的OffsetTop
    swiperImageLoad(){
-    //  console.log(this.$refs.tabControl.$el.offsetTop);
      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop;
    },
   },
@@ -157,32 +156,18 @@ import { itemListenerMixin, backTopMixin } from 'assets/commons/mixin'
    this.getHomeGoods('new');
    this.getHomeGoods('sell');
   },
-  mounted(){
-    //*** 被注释的方法改为使用混入的方式来解决 ***
 
-  //   //1.图片加载完成的事件监听
-  //   const refresh = debounce(this.$refs.scroll.refresh, 200);
-  //   //对监听的事件进行保存
-  //   this.itemImgListener = () => {
-  //   // console.log('图片加载完')
-  //   //通过调用上面的防抖函数来进行频繁请求的处理
-  //   refresh();
-  //  }
-  //   this.$bus.$on('itemImageLoad', this.itemImgListener)
-  },
-  destroyed(){
-    console.log('home销毁')
-  },
-  //
   activated(){
     // console.log('activated')
     this.$refs.scroll.scrollTo(0,this.saveY,0);
     this.$refs.scroll.refresh();
   },
+
   deactivated(){
     // console.log('deactivated')
     //1.保存Y值
     this.saveY = this.$refs.scroll.getScrollY();
+    // console.log(this.saveY)
 
     //2.取消全局事件的监听
     this.$bus.$off('itemImageLoad', this.itemImgListener);
@@ -207,7 +192,7 @@ import { itemListenerMixin, backTopMixin } from 'assets/commons/mixin'
 }
 .content{
   position: absolute;
-  top: 44px;
+  top: 43px;
   bottom: 49px;
   left: 0;
   right: 0;
