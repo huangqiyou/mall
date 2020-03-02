@@ -1,6 +1,6 @@
 <template>
  <div class="goods-item" @click="itemClick">
-  <img :src="goodsItem.show.img" alt="" @load="imageLoad">
+  <img :src="showImage" alt="" @load="imageLoad">
   <div class="goods-info">
    <p>{{goodsItem.title}}</p>
    <span class="price">{{goodsItem.price}}</span>
@@ -20,13 +20,25 @@
     }
    }
   },
+  computed:{
+   showImage(){
+    //根据不同地方来源的图片进行图片显示处理
+    return this.goodsItem.image || this.goodsItem.show.img
+   }
+  },
   methods:{
    //监听图片加载完成
    imageLoad(){
     // console.log('imageLoad');
     //发射事件
     this.$bus.$emit('itemImageLoad',)
-    // console.log(this.$bus);
+
+    // if(this.$route.path.indexOf('/home')){
+    //  this.$bus.$emit('homeItemImageLoad',)
+    //  // console.log(this.$bus);
+    // }else if(this.$route.path.indexOf('/detail')){
+    //  this.$bus.$emit('detailItemImageLoad',)
+    // }
    },
    //点击跳转
    itemClick(){

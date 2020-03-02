@@ -33,7 +33,10 @@ import NavBar from 'components/common/navbar/NavBar'
   methods:{
    //点击切换标题样式
    titleClick(index){
+    //点击切换标题
     this.currentIndex = index;
+    //发出点击事件
+    this.$emit('titleClick',index);
    },
 
    //点击< 返回

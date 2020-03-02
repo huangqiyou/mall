@@ -39,74 +39,6 @@
 
   <!-- BackTop -->
   <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
-  <!-- <ul>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-    <li>123</li>
-  </ul> -->
  </div>
 </template>
 
@@ -118,15 +50,17 @@ import FeatureView from './childCompons/FeatureView'
 import TabControl from 'components/content/tabcontrol/TabControl'
 import GoodsList from 'components/content/goods/GoodsList'
 import Scroll from 'components/common/scroll/Scroll'
-import BackTop from 'components/content/backtop/BackTop'
 
 import { getHomeMultidata, getHomeGoods } from 'network/home'
 import { debounce } from 'assets/commons/utils'
+import { itemListenerMixin, backTopMixin } from 'assets/commons/mixin'
+
  export default {
   name:'Home',
   components:{
-   NavBar, HomeSwiper, Recommend, FeatureView, TabControl, GoodsList, Scroll, BackTop
+   NavBar, HomeSwiper, Recommend, FeatureView, TabControl, GoodsList, Scroll,
   },
+  mixins: [itemListenerMixin, backTopMixin],//混入
   data() {
    return {
     banners: [],//保存轮播图数据
@@ -137,7 +71,6 @@ import { debounce } from 'assets/commons/utils'
      'sell':{page:0,list:[]},
     },
     currentType:'pop',//默认为pop
-    isShowBackTop:false, //返回顶部显示隐藏
     tabOffsetTop:0,//保存tabControl吸顶距离
     isTabFixed:false,//tab-control 显示影藏
     saveY:0,//保存离开页面时的距离
@@ -192,17 +125,11 @@ import { debounce } from 'assets/commons/utils'
     this.$refs.tabControl2.currentIndex = index;
    },
 
-   //返回顶部
-   backClick(){
-    //  console.log('123')
-    this.$refs.scroll.scrollTo(0,0);
-   },
-
    //监听滚动
    contentScroll(position){
     //  console.log(position)
     //1.判断backTop是否显示
-    this.isShowBackTop = (-position.y) > 1000;
+    this.listenShowBackTop(position);
 
     //2.决定tabControl是否吸顶（position：fiexd）固定定位
     this.isTabFixed = (-position.y) > this.tabOffsetTop;
@@ -231,13 +158,17 @@ import { debounce } from 'assets/commons/utils'
    this.getHomeGoods('sell');
   },
   mounted(){
-    //1.图片加载完成的事件监听
-    const refresh = debounce(this.$refs.scroll.refresh, 200);
-    this.$bus.$on('itemImageLoad', () => {
-    // console.log('图片加载完')
-    //通过调用上面的防抖函数来进行频繁请求的处理
-    refresh();
-   });
+    //*** 被注释的方法改为使用混入的方式来解决 ***
+
+  //   //1.图片加载完成的事件监听
+  //   const refresh = debounce(this.$refs.scroll.refresh, 200);
+  //   //对监听的事件进行保存
+  //   this.itemImgListener = () => {
+  //   // console.log('图片加载完')
+  //   //通过调用上面的防抖函数来进行频繁请求的处理
+  //   refresh();
+  //  }
+  //   this.$bus.$on('itemImageLoad', this.itemImgListener)
   },
   destroyed(){
     console.log('home销毁')
@@ -250,7 +181,11 @@ import { debounce } from 'assets/commons/utils'
   },
   deactivated(){
     // console.log('deactivated')
+    //1.保存Y值
     this.saveY = this.$refs.scroll.getScrollY();
+
+    //2.取消全局事件的监听
+    this.$bus.$off('itemImageLoad', this.itemImgListener);
   },
  }
 </script>

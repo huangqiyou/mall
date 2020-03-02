@@ -1,5 +1,9 @@
+//通过  import {getDetail,Goods,Shop,GoodsParam} from 'network/detail'在组件中引入才能调用下面的函数名
+
 //detail页面数据请求封装文件
+
 import { request } from './requset'
+
 //请求全部数据
 export function getDetail(iid) {
     return request({
@@ -9,6 +13,7 @@ export function getDetail(iid) {
         }
     })
 }
+
 //创建构造函数获取、管理相应的数据
 export class Goods {
     constructor(itemInfo, columns, services) {
@@ -34,6 +39,7 @@ export class Shop {
         this.goodsCount = shopInfo.cGoods;
     }
 }
+
 //参数相关数据
 export class GoodsParam {
     constructor(info, rule) {
@@ -42,4 +48,11 @@ export class GoodsParam {
         this.infos = info.set;
         this.sizes = rule.tables;
     }
+}
+
+//推荐数据请求函数封装
+export function getRecommend() {
+    return request({
+        url: '/recommend'
+    })
 }
