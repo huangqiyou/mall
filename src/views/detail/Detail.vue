@@ -34,6 +34,9 @@
 
   <!-- BackTop -->
   <back-top @click.native="backClick" v-show="isShowBackTop"></back-top>
+
+  <!-- Toast -->
+  <!-- <toast :message="message" :show="show"></toast> -->
  </div>
 </template>
 
@@ -49,10 +52,13 @@ import DetailBottomBar from './childCompons/DetailBottomBar'
 
 import Scroll from 'components/common/scroll/Scroll'
 import GoodsList from 'components/content/goods/GoodsList'
+// import Toast from 'components/common/toast/Toast'
 
 import { getDetail, Goods, Shop, GoodsParam, getRecommend } from 'network/detail'
 import { debounce } from 'assets/commons/utils'
 import { itemListenerMixin, backTopMixin } from 'assets/commons/mixin'
+
+import { mapActions } from 'vuex'
 
  export default {
   name:'Detail',
@@ -67,6 +73,7 @@ import { itemListenerMixin, backTopMixin } from 'assets/commons/mixin'
    DetailBottomBar,
    Scroll,
    GoodsList,
+   // Toast
   },
   mixins: [itemListenerMixin, backTopMixin],//混入
   data() {
@@ -82,6 +89,8 @@ import { itemListenerMixin, backTopMixin } from 'assets/commons/mixin'
     themeTopYs:[],//保存滚动的内容高度
     getThemeTopY:null,//保存防抖处理后的数据
     currentIndex:0, //保存滚动区域的下标
+    // message:'',//保存成功加入到购物车的提示消息
+    // show:false,//保存提示消息的影藏显示
    }
   },
   created(){
@@ -135,6 +144,9 @@ import { itemListenerMixin, backTopMixin } from 'assets/commons/mixin'
   },
 
   methods:{
+   //映射addCart函数
+   ...mapActions (['addCart']),
+
    //监听图片是否加载完成
    imageLoad(){
     this.refresh();
@@ -190,7 +202,34 @@ import { itemListenerMixin, backTopMixin } from 'assets/commons/mixin'
     product.iid = this.iid;
 
     //2.将商品添加到购物车里
-    this.$store.dispatch('addCart',product);
+    //写法一：调用映射过来的addCart函数
+    this.addCart(product).then(res => {
+     //调用封装好的弹窗提示插件函数
+     this.$toast.show(res,2000);
+     // console.log(this.$toast)
+
+     //下面的被注释的方式也能成功，只是用起不方便
+     // console.log(res);
+     //成功添加到购物车后将show改为true
+     // this.show = true;
+     // //成功添加到购物车后将message提示消息改为res
+     // this.message = res;
+     // //
+     // setTimeout(() => {
+     //  //弹窗提示之后再通过定时器改为false
+     //  this.show = false;
+     //  //再清空message的内容
+     //  this.message = '';
+     // },1500)
+    })
+
+    //写法二：普通写法
+    // this.$store.dispatch('addCart',product).then(res => {
+    //  console.log(res)
+    // });
+
+    //3.添加到购物车消息提示
+
    },
   },
   destroyed(){

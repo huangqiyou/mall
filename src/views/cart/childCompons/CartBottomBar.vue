@@ -12,7 +12,7 @@
   <!-- 合计 -->
   <div class="price">合计：{{totalPrice}}</div>
   <!-- 去计算 -->
-  <div class="calculate">去计算({{checkLebgth}})</div>
+  <div class="calculate" @click="calcClick">去计算({{checkLebgth}})</div>
  </div>
 </template>
 
@@ -70,6 +70,14 @@ import { mapGetters } from 'vuex'
      this.cartList.forEach(item => item.checked = true);
     }
    },
+
+   //
+   calcClick(){
+     if(!this.isSelectAll){
+       //调用封装好的弹窗提示插件函数
+       this.$toast.show('请选择要结算的商品',2000);
+     }
+   }
   }
  }
 </script>
